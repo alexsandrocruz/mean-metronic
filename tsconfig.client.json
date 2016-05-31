@@ -1,0 +1,29 @@
+{
+    "compilerOptions": {
+        "sourceMap": true,
+        "rootDir": "./client",
+        "outDir": ".tmp",
+        "target": "ES5"
+    },
+    "filesGlob": [
+        "client/{app,components}/**/!(*.spec).ts",
+        "typings/main.d.ts"
+    ],
+    "files": [
+        "client/app/app.ts",
+        "client/app/controllers/DashboardController.ts",
+        "client/app/controllers/GeneralPageController.ts",
+        "client/app/controllers/TodoController.ts",
+        "client/app/controllers/UISelectController.ts",
+        "client/app/controllers/UserProfileController.ts",
+        "client/app/directives.ts",
+        "client/app/table-ajax.ts",
+        "client/components/modal/modal.service.ts",
+        "client/components/socket/socket.mock.ts",
+        "client/components/socket/socket.service.ts",
+        "client/components/ui-router/ui-router.mock.ts",
+        "client/components/util/util.module.ts",
+        "client/components/util/util.service.ts",
+        "typings/main.d.ts"
+    ]
+}
