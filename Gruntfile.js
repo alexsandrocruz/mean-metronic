@@ -1,4 +1,4 @@
-// Generated on 2016-05-30 using generator-angular-fullstack 3.7.3
+// Generated on 2016-05-31 using generator-angular-fullstack 3.7.4
 'use strict';
 
 module.exports = function(grunt) {
@@ -153,7 +153,16 @@ module.exports = function(grunt) {
           ]
         }]
       },
-      server: '.tmp'
+      server: '.tmp',
+      metronic: {
+        files: [{
+          dot: true,
+          src: [
+            '.tmp',
+            '<%= yeoman.client %>/assets/!(images)**'
+          ]
+        }]
+      }
     },
 
     // Add vendor prefixed styles
@@ -212,7 +221,6 @@ module.exports = function(grunt) {
     wiredep: {
       options: {
         exclude: [
-          /bootstrap.js/,
           '/json3/',
           '/es5-shim/',
           /font-awesome\.css/,
@@ -301,7 +309,7 @@ module.exports = function(grunt) {
     // `server/config/environment/shared.js`
     ngconstant: {
       options: {
-        name: 'metronicApp.constants',
+        name: 'MetronicApp.constants',
         dest: '<%= yeoman.client %>/app/app.constant.js',
         deps: [],
         wrap: true,
@@ -320,7 +328,7 @@ module.exports = function(grunt) {
     ngtemplates: {
       options: {
         // This should be the name of your apps angular module
-        module: 'MetronicApp',
+        module: 'skeletonApp',
         htmlmin: {
           collapseBooleanAttributes: true,
           collapseWhitespace: true,
@@ -587,6 +595,21 @@ module.exports = function(grunt) {
         files: {
           '.tmp/app/app.css' : '<%= yeoman.client %>/app/app.scss'
         }
+      },
+      // *** compiles metronic sass to css
+      // added by sitt shein
+      metronic: {
+        options: {
+          compass: false
+        },
+        files: [{
+          expand: true,
+          cwd: 'sass/',
+          src: ['**/*.scss'],
+          dest: '<%= yeoman.client %>/assets/metronic/dist/css',
+          ext: '.css',
+          extDot: 'last'
+        }]
       }
     },
 
@@ -629,7 +652,6 @@ module.exports = function(grunt) {
           transform: function(filePath) {
             var yoClient = grunt.config.get('yeoman.client');
             filePath = filePath.replace('/' + yoClient + '/app/', '');
-            filePath = filePath.replace('/' + yoClient + '/assets/', '');
             filePath = filePath.replace('/' + yoClient + '/components/', '../components/');
             return '@import \'' + filePath + '\';';
           },
@@ -663,6 +685,43 @@ module.exports = function(grunt) {
         }
       }
     },
+
+    // compressing custom scripts width uglify
+    // added by sitt shein
+    uglify: {
+        apps: {
+          files: [{
+              expand: true,
+              cwd: './assets/apps',
+              src: '**/*.js',
+              dest: '<%= yeoman.client %>/assets/metronic/dist/js/apps'
+          }] 
+        },
+        layouts: {
+          files: [{
+              expand: true,
+              cwd: './assets/layouts',
+              src: '**/*.js',
+              dest: '<%= yeoman.client %>/assets/metronic/dist/js/layouts'
+          }] 
+        },
+        pages: {
+          files: [{
+              expand: true,
+              cwd: './assets/pages',
+              src: '**/*.js',
+              dest: '<%= yeoman.client %>/assets/metronic/dist//js/pages'
+          }] 
+        },
+        options: {
+            mangle: false,
+            compress: {
+                drop_console: true
+            },  
+            beautify: true,
+        },
+    }, 
+
   });
 
   // Used for delaying livereload until after server has restarted
@@ -822,6 +881,25 @@ module.exports = function(grunt) {
     'filerev',
     'usemin'
   ]);
+
+  // *** registering grunt task: compressing metronic scripts width uglify
+  grunt.registerTask('metronicjs', [
+    'uglify:apps',
+    'uglify:layouts',
+    'uglify:pages'
+  ]);
+
+  // *** registering grunt task: compiling metronic sass to css
+  grunt.registerTask('metronicsass', [
+    'sass:metronic'
+  ]);
+
+  grunt.registerTask('metronic', [
+    'clean:metronic',
+    'metronicjs',
+    'metronicsass'
+  ]);
+
 
   grunt.registerTask('default', [
     'newer:tslint',
