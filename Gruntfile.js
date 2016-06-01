@@ -89,7 +89,7 @@ module.exports = function(grunt) {
       },
       sass: {
         files: ['<%= yeoman.client %>/{app,components}/**/*.{scss,sass}'],
-        tasks: ['sass', 'postcss']
+        tasks: ['sass:server', 'postcss']
       },
       gruntfile: {
         files: ['Gruntfile.js']
@@ -434,13 +434,13 @@ module.exports = function(grunt) {
       server: [
         'ts:client',
         'copy:constant',
-        'sass',
+        'sass:server',
       ],
       test: [
         'ts:client',
         'copy:constant',
         'ts:client_test',
-        'sass',
+        'sass:server',
       ],
       debug: {
         tasks: [
@@ -454,7 +454,7 @@ module.exports = function(grunt) {
       dist: [
         'ts:client',
         'copy:constant',
-        'sass',
+        'sass:server',
         'imagemin'
       ]
     },
@@ -696,7 +696,7 @@ module.exports = function(grunt) {
         files: [{
             expand: true,
             cwd: './assets/apps',
-            src: '**/*.js',
+            src: ['**/*.js','!**/*.min.js'],
             dest: '<%= yeoman.client %>/assets/metronic/dist/js/apps'
         }] 
       },
@@ -704,7 +704,7 @@ module.exports = function(grunt) {
         files: [{
             expand: true,
             cwd: './assets/layouts',
-            src: '**/*.js',
+            src: ['**/*.js','!**/*.min.js'],
             dest: '<%= yeoman.client %>/assets/metronic/dist/js/layouts'
         }] 
       },
@@ -712,21 +712,50 @@ module.exports = function(grunt) {
         files: [{
             expand: true,
             cwd: './assets/pages',
-            src: '**/*.js',
-            dest: '<%= yeoman.client %>/assets/metronic/dist//js/pages'
+            src: ['**/*.js','!**/*.min.js'],
+            dest: '<%= yeoman.client %>/assets/metronic/dist/js/pages'
         }] 
       },
       global: {
         files: [{
             expand: true,
             cwd: './assets/global',
-            src: '**/*.js',
-            dest: '<%= yeoman.client %>/assets/metronic/dist//js/global'
+            src: ['**/*.js','!**/*.min.js'],
+            dest: '<%= yeoman.client %>/assets/metronic/dist/js/global'
         }] 
       },
-    } 
+    },
+
+    // *** concat task for metronic js files
+    dirs: {
+      src: '<%= yeoman.client %>/assets/metronic/dist/js',
+      dest: '<%= yeoman.client %>/assets/metronic/dist/js',
+    },
+    concat: {
+      options: {
+        separator: ';',
+      },
+      apps: {
+          src: ['<%= dirs.src %>/apps/**/*.js'],
+          dest: '<%= dirs.dest %>/apps.combine.js'
+      },
+      // global: {
+      //     src: ['<%= dirs.src %>/global/**/*.js'],
+      //     dest: '<%= dirs.dest %>/global.combine.js'
+      // },
+      layouts: {
+          src: ['<%= dirs.src %>/layouts/**/*.js'],
+          dest: '<%= dirs.dest %>/layouts.combine.js'
+      },
+      pages: {
+          src: ['<%= dirs.src %>/pages/**/*.js'],
+          dest: '<%= dirs.dest %>/pages.combine.js'
+      },
+    }
 
   });
+
+
 
   // Used for delaying livereload until after server has restarted
   grunt.registerTask('wait', function() {
