@@ -1,4 +1,4 @@
-// Generated on 2016-05-31 using generator-angular-fullstack 3.7.4
+// Generated on 2016-06-01 using generator-angular-fullstack 3.7.3
 'use strict';
 
 module.exports = function(grunt) {
@@ -223,9 +223,7 @@ module.exports = function(grunt) {
         exclude: [
           '/json3/',
           '/es5-shim/',
-          /font-awesome\.css/,
-          /bootstrap\.css/,
-          /bootstrap-sass-official/
+          /font-awesome\.css/
         ]
       },
       client: {
@@ -309,7 +307,7 @@ module.exports = function(grunt) {
     // `server/config/environment/shared.js`
     ngconstant: {
       options: {
-        name: 'MetronicApp.constants',
+        name: 'metronicApp.constants',
         dest: '<%= yeoman.client %>/app/app.constant.js',
         deps: [],
         wrap: true,
@@ -328,7 +326,7 @@ module.exports = function(grunt) {
     ngtemplates: {
       options: {
         // This should be the name of your apps angular module
-        module: 'skeletonApp',
+        module: 'metronicApp',
         htmlmin: {
           collapseBooleanAttributes: true,
           collapseWhitespace: true,
@@ -686,41 +684,47 @@ module.exports = function(grunt) {
       }
     },
 
-    // compressing custom scripts width uglify
-    // added by sitt shein
     uglify: {
-        apps: {
-          files: [{
-              expand: true,
-              cwd: './assets/apps',
-              src: '**/*.js',
-              dest: '<%= yeoman.client %>/assets/metronic/dist/js/apps'
-          }] 
-        },
-        layouts: {
-          files: [{
-              expand: true,
-              cwd: './assets/layouts',
-              src: '**/*.js',
-              dest: '<%= yeoman.client %>/assets/metronic/dist/js/layouts'
-          }] 
-        },
-        pages: {
-          files: [{
-              expand: true,
-              cwd: './assets/pages',
-              src: '**/*.js',
-              dest: '<%= yeoman.client %>/assets/metronic/dist//js/pages'
-          }] 
-        },
-        options: {
-            mangle: false,
-            compress: {
-                drop_console: true
-            },  
-            beautify: true,
-        },
-    }, 
+      options: {
+          mangle: false,
+          compress: {
+              drop_console: true
+          },  
+          beautify: true,
+      },
+      apps: {
+        files: [{
+            expand: true,
+            cwd: './assets/apps',
+            src: '**/*.js',
+            dest: '<%= yeoman.client %>/assets/metronic/dist/js/apps'
+        }] 
+      },
+      layouts: {
+        files: [{
+            expand: true,
+            cwd: './assets/layouts',
+            src: '**/*.js',
+            dest: '<%= yeoman.client %>/assets/metronic/dist/js/layouts'
+        }] 
+      },
+      pages: {
+        files: [{
+            expand: true,
+            cwd: './assets/pages',
+            src: '**/*.js',
+            dest: '<%= yeoman.client %>/assets/metronic/dist//js/pages'
+        }] 
+      },
+      global: {
+        files: [{
+            expand: true,
+            cwd: './assets/global',
+            src: '**/*.js',
+            dest: '<%= yeoman.client %>/assets/metronic/dist//js/global'
+        }] 
+      },
+    } 
 
   });
 
@@ -886,7 +890,8 @@ module.exports = function(grunt) {
   grunt.registerTask('metronicjs', [
     'uglify:apps',
     'uglify:layouts',
-    'uglify:pages'
+    'uglify:pages',
+    'uglify:global'
   ]);
 
   // *** registering grunt task: compiling metronic sass to css
@@ -899,7 +904,6 @@ module.exports = function(grunt) {
     'metronicjs',
     'metronicsass'
   ]);
-
 
   grunt.registerTask('default', [
     'newer:tslint',

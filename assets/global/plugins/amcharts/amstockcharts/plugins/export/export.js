@@ -76,7 +76,7 @@ if ( !AmCharts.translations[ "export" ][ "en" ] ) {
 				resources: [ {
 					"pdfmake/pdfmake.js": [ "pdfmake/vfs_fonts.js" ],
 					"jszip/jszip.js": [ "xlsx/xlsx.js" ]
-				}, "fabric.js/fabric.js", "FileSaver.js/FileSaver.js" ]
+				}, "fabric/fabric.js", "FileSaver/FileSaver.js" ]
 			},
 			config: {},
 			setup: {
